@@ -24,8 +24,8 @@ def scrap():
     # 1952/583
     # 2010/4315
     # 2018/4822
-    year = 1952
-    stampNum = 583
+    year = 2018
+    stampNum = 4822
     yearUpperBound = 2019
     url = constructUrl(year, stampNum)
     for i in range(year, yearUpperBound):
