@@ -3,7 +3,6 @@ __email__ = "anijaya9@gmail.com"
 __license__ = "GNU"
 
 import cv2
-import sift
 import os
 from glob import glob
 import pickle
@@ -108,7 +107,7 @@ def create_query_database(_path):
     img_db = {}
 
     for file in glob(_path):
-        kp, desc = sift.get_sift_features(file)
+        kp, desc = get_sift_features(file)
         img_db[os.path.basename(file)] = {"keypoint": kp,
                                               "descriptors": desc}
 
@@ -148,12 +147,12 @@ if __name__ == "__main__":
 
     for files in glob(target_path, recursive=True):
         results = {}
-        kb1, des1 = sift.get_sift_features(files)
+        kb1, des1 = get_sift_features(files)
         print(os.path.basename(files), "\n")
         for keys, values in query_db.items():
             kb2 = values["keypoint"]
             des2 = values["descriptors"]
-            good, percentage = sift.compare_features_flann(kb1, des1, kb2, des2)
+            good, percentage = compare_features_flann(kb1, des1, kb2, des2)
 
             results[keys] = percentage
 
