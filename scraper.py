@@ -24,19 +24,27 @@ def scrap():
     # 1952/583
     # 2010/4315
     # 2018/4822
-    year = 2018
-    stampNum = 4822
+    year = 2010
+    stampNum = 4315
     yearUpperBound = 2019
+
+    reset_counter = 0
+
     url = constructUrl(year, stampNum)
     for i in range(year, yearUpperBound):
         while is_valid(url):
+            if reset_counter == 3:
+                stampNum -= reset_counter
+                reset_counter = 0
+                break
             url = constructUrl(i, stampNum)
             print(url)
             response = requests.get(url, allow_redirects=True)
             if response.status_code == 404:
                 print('NOT FOUND 404')
-                break
-            download(response, 'images', i)
+                reset_counter +=1
+            else:
+                download(response, 'images', i)
             stampNum = stampNum + 1
 
 
