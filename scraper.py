@@ -8,11 +8,11 @@ def is_valid(url):
     return bool(parsed.netloc) and bool(parsed.scheme)
 
 
-def download(response, pathname):
+def download(response, pathname, year):
     if not os.path.isdir(pathname):
         os.makedirs(pathname)
 
-    filename = os.path.join(pathname, response.url.split("/")[-1])
+    filename = os.path.join(pathname, f"{str(year)}_" + response.url.split("/")[-1])
 
     with open(filename, "wb") as f:
         f.write(response.content)
@@ -36,7 +36,7 @@ def scrap():
             if response.status_code == 404:
                 print('NOT FOUND 404')
                 break
-            download(response, 'images')
+            download(response, 'images', i)
             stampNum = stampNum + 1
 
 
