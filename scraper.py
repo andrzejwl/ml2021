@@ -44,6 +44,7 @@ def scrap():
                 print('NOT FOUND 404')
                 reset_counter +=1
             else:
+                reset_counter = 0
                 download(response, 'images', i)
             stampNum = stampNum + 1
 
