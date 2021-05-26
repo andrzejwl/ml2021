@@ -1,36 +1,11 @@
-__author__      = "Anirudh NJ"
-__email__ = "anijaya9@gmail.com"
-__license__ = "GNU"
-
 import cv2
 import os
 from glob import glob
 import pickle
 import numpy as np
 
-"""
-# Geenee Image Recognition Challenge
-### Algorithm
-The general steps of the algorithm are :    
-1. Finding the SIFT keypoints(kp) and the descriptors(d) of the Target image
-1. Generate a SIFT feature database (Dictionary in our case) of all the query image.
-1. Compare the features of the target image to each of the query features in the database.
-(either FLANN or BruteForce matcher can be used)
-1. Use statestical methods to find the best matches for a target image.      
-### Requirements
-1. OpenCV with contrib and non_free modules compiled 
-### Result
-Depending on the target image we are getting between 90% to 100% accuracy 
-according to the calculation metrices given.    
-#### Note : There are two different images in the Query folder named 'image10.jpg'.
-"""
+
 def get_sift_features(_in_path,_debug_view = False):
-    '''
-    Generating the SIFT features
-    :param _in_path: path to image
-    :param _debug_view: -
-    :return: keypoints , descriptors
-    '''
     img = cv2.imread(_in_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -56,7 +31,6 @@ def compare_features_flann(_kp1,_dsc1,_kp2,_dsc2,_thres=0):
     # Need to draw only good matches, so create a mask
     matches_mask = [[0, 0,] for i in range(len(matches))]
 
-    # ratio test as per Lowe's paper
     good_points = []
     for i, (m, n) in enumerate(matches):
         if m.distance < 0.6 * n.distance:
@@ -91,6 +65,7 @@ def compare_features_bf(_kp1,_dsc1,_kp2,_dsc2,_thres = 0):
     else:
         number_keypoints = len(_kp2)
 
+    # DEBUG
     # print("Keypoints 1ST Image: " + str(len(_kp1)))
     # print("Keypoints 2ND Image: " + str(len(_kp2)))
     # print("GOOD Matches:", len(good_points))
@@ -99,11 +74,6 @@ def compare_features_bf(_kp1,_dsc1,_kp2,_dsc2,_thres = 0):
     return good_points , len(good_points) / number_keypoints * 100
 
 def create_query_database(_path):
-    """
-    Creating a feature database : a dictionary with filename and SIFT features
-    :param _path: path to query path
-    :return: image_db
-    """
     img_db = {}
 
     for file in glob(_path):
@@ -118,11 +88,6 @@ def create_query_database(_path):
     return img_db
 
 def get_best_matches(_result_dict):
-    """
-    Using statistical methods to remove the best results
-    :param _result_dict: query results as a dictionary
-    :return: results of thresholding
-    """
     mean = np.mean([val for key,val in _result_dict.items()])
 
     positive = {}
@@ -138,8 +103,6 @@ def get_best_matches(_result_dict):
     return positive
 
 if __name__ == "__main__":
-
-    # Give paths to the Query and Targets folder
     target_path = "query/*.jpg"
     query_path = "images/*.jpg"
 
