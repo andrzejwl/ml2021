@@ -24,16 +24,16 @@ def scrap():
     # 1952/583
     # 2010/4315
     # 2018/4822
-    year = 2010
-    stampNum = 4315
-    yearUpperBound = 2019
+    year = 1952
+    stampNum = 583
+    yearUpperBound = 2018
 
     reset_counter = 0
 
     url = constructUrl(year, stampNum)
     for i in range(year, yearUpperBound):
         while is_valid(url):
-            if reset_counter == 3:
+            if reset_counter == 12:
                 stampNum -= reset_counter
                 reset_counter = 0
                 break
@@ -45,7 +45,7 @@ def scrap():
                 reset_counter +=1
             else:
                 reset_counter = 0
-                download(response, 'images', i)
+                download(response, 'images_52_18', i)
             stampNum = stampNum + 1
 
 
