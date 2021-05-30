@@ -5,29 +5,9 @@ from glob import glob
 import pickle
 import numpy as np
 
-"""
-# Geenee Image Recognition Challenge
-### Algorithm
-The general steps of the algorithm are :    
-1. Finding the SIFT keypoints(kp) and the descriptors(d) of the Target image
-1. Generate a SIFT feature database (Dictionary in our case) of all the query image.
-1. Compare the features of the target image to each of the query features in the database.
-(either FLANN or BruteForce matcher can be used)
-1. Use statestical methods to find the best matches for a target image.      
-### Requirements
-1. OpenCV with contrib and non_free modules compiled 
-### Result
-Depending on the target image we are getting between 90% to 100% accuracy 
-according to the calculation metrices given.    
-#### Note : There are two different images in the Query folder named 'image10.jpg'.
-"""
+
 def get_sift_features(_in_path,_debug_view = False):
-    '''
-    Generating the SIFT features
-    :param _in_path: path to image
-    :param _debug_view: -
-    :return: keypoints , descriptors
-    '''
+
     img = cv2.imread(_in_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -96,11 +76,7 @@ def compare_features_bf(_kp1,_dsc1,_kp2,_dsc2,_thres = 0):
     return good_points , len(good_points) / number_keypoints * 100
 
 def create_query_database(_path):
-    """
-    Creating a feature database : a dictionary with filename and SIFT features
-    :param _path: path to query path
-    :return: image_db
-    """
+
     print("[start] Creating query database ...")
     img_db = {}
     for file in glob(_path):
@@ -116,11 +92,7 @@ def create_query_database(_path):
     return img_db
 
 def get_best_matches(_result_dict):
-    """
-    Using statistical methods to remove the best results
-    :param _result_dict: query results as a dictionary
-    :return: results of thresholding
-    """
+
     mean = np.mean([val for key,val in _result_dict.items()])
 
     positive = {}
